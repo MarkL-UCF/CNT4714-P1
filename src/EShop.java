@@ -7,6 +7,7 @@ Date: Sunday January 26, 2025
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
 public class EShop implements ActionListener{
     //class constants
     //values currently double that of the example
@@ -17,14 +18,13 @@ public class EShop implements ActionListener{
 
     //private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
 
-    private static final String LEGEND = "  This windchill " + "calculator is intended for wind speeds greater than 4 mph.";
     //instance variables
     //window for GUI
     private JFrame window = new JFrame("Nile.com");
-    private JPanel Base;
-    private JPanel Entry;
-    private JPanel Cart;
-    private JPanel Controls;
+    private JPanel base;
+    private JPanel entry;
+    private JPanel cart;
+    private JPanel controls;
 
 
     //Windchill():  constructor
@@ -38,7 +38,10 @@ public class EShop implements ActionListener{
         //add components to the container
         Container c = window.getContentPane();
         //c.setLayout(LAYOUT_STYLE);
-        c.setLayout(new GridLayout(3,1)); //using GridLayout instead
+        c.add(base);
+        c.add(entry);
+        c.add(cart);
+        c.add(controls);
 
         //display GUI
         window.show();
