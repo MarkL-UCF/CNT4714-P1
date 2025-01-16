@@ -21,6 +21,10 @@ public class EShop implements ActionListener{
     //instance variables
     //window for GUI
     private JFrame window = new JFrame("Nile.com");
+    private JPanel Base;
+    private JPanel Entry;
+    private JPanel Cart;
+    private JPanel Controls;
 
 
     //Windchill():  constructor
