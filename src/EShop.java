@@ -20,30 +20,62 @@ public class EShop implements ActionListener{
 
     //instance variables
     //window for GUI
+
     private JFrame window = new JFrame("Nile.com");
+    /*
     private JPanel base;
     private JPanel entry;
     private JPanel cart;
     private JPanel controls;
-
+    */
 
     //Windchill():  constructor
     public EShop() {
+
         //configure GUI
-        window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        window.setTitle("Nile.com - Spring 2025"); //set title of the frame
+        window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); //set frame size
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //register event listener
 
-        //add components to the container
-        Container c = window.getContentPane();
-        //c.setLayout(LAYOUT_STYLE);
-        c.add(base);
-        c.add(entry);
-        c.add(cart);
-        c.add(controls);
+        //define a content pane to hold everything
+        Container pane = window.getContentPane();
 
-        //display GUI
+        //create grid layouts
+        GridLayout grid6by2 = new GridLayout(6,2,8,4);
+        GridLayout grid7by2 = new GridLayout(7,2,8,4);
+
+        //GridLayout grid5by2 = new GridLayout(5,2,8,6); //buttons
+        //GridLayout grid6by2X = new GridLayout(6,2,2,2); //cart
+
+        //create panels
+        JPanel northPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        JPanel southPanel = new JPanel();
+
+        //set layouts for panels
+        northPanel.setLayout(grid6by2);
+        centerPanel.setLayout(grid7by2);
+        southPanel.setLayout(grid6by2);
+
+        //add panels to content pane using BorderLayout
+        pane.add(northPanel, BorderLayout.NORTH);
+        pane.add(centerPanel, BorderLayout.CENTER);
+        pane.add(southPanel, BorderLayout.SOUTH);
+
+        //style panes
+        pane.setBackground(Color.DARK_GRAY);
+        northPanel.setBackground(Color.darkGray);
+        //northPanel.setForeground(Color.yellow); //text color
+
+        centerPanel.setBackground(Color.LIGHT_GRAY);
+        southPanel.setBackground(Color.blue);
+        //Font font = new Font("Tahoma", Font.PLAIN, 30);
+        //northPanel.setFont(new java.awt.Font("Tahoma",Font.PLAIN,60));
+
+        //centerFrame(WIDTH, HEIGHT);
+
         window.show();
     }
     //actionPerformed(): run button action event handler
