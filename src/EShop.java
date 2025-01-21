@@ -197,13 +197,15 @@ public class EShop extends JFrame{
 
     private class NewButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-
+            System.out.println("The New Button Was Clicked...");
         }
     }
 
     private class ExitButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
+            System.out.println("The Exit Button Was Clicked...");
 
+            System.exit(0);
         }
     }
 
