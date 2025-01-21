@@ -4,6 +4,8 @@ Assignment title: Project 1 – An Event-driven Enterprise Simulation
 Date: Sunday January 26, 2025
 */
 
+package Project;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -212,6 +214,7 @@ public class EShop extends JFrame{
     //main():  application entry point
     public static void main(String[] args) {
         EShop gui = new EShop();
+        ItemFinder.SearchInventoryFile();
 
         /*
         JFrame aNewStore = new EShop(); //create the frame object
