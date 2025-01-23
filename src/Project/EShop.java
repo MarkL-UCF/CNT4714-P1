@@ -24,7 +24,9 @@ public class EShop extends JFrame{
     private JFrame window = new JFrame("Nile.com");
 
     private JLabel blankLabel, controlsLabel, cartHeader, cart1, cart2, cart3, cart4, cart5;
+    private JLabel inputIDHeader, inputQuantHeader, detailsHeader, subtotalHeader, detailsLabel, subtotalLabel;
     private JButton blankButton, processB, confirmB, deleteB, finishB, newB, exitB;
+    private JTextField inputID, inputQuant;
 
     //declare reference variables for event handlers
     private ProcessButtonHandler procbHandler;
