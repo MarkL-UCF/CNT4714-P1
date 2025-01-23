@@ -49,6 +49,16 @@ public class EShop extends JFrame{
         blankButton = new JButton(" ");
         blankLabel = new JLabel(" ", SwingConstants.RIGHT);
         controlsLabel = new JLabel(" USER CONTROLS ", SwingConstants.RIGHT);
+
+        inputIDHeader = new JLabel("Enter ID for Item #1:", SwingConstants.RIGHT);
+        inputQuantHeader = new JLabel("Enter quantity for Item #1:", SwingConstants.RIGHT);
+        detailsHeader = new JLabel("Details for Item #1:", SwingConstants.RIGHT);
+        subtotalHeader = new JLabel("Current Subtotal for 0 item(s):", SwingConstants.RIGHT);
+        inputID = new JTextField();
+        inputQuant = new JTextField();
+        detailsLabel = new JLabel();
+        subtotalLabel = new JLabel();
+
         cartHeader = new JLabel("Your Shopping Cart Is Currently Empty", SwingConstants.CENTER);
         cart1 = new JLabel(" ", SwingConstants.LEFT);
         cart2 = new JLabel(" ", SwingConstants.LEFT);
@@ -124,6 +134,21 @@ public class EShop extends JFrame{
         //Font font = new Font("Tahoma", Font.PLAIN, 30);
         //northPanel.setFont(new java.awt.Font("Tahoma",Font.PLAIN,60));s
 
+
+        inputIDHeader.setForeground(Color.YELLOW);
+        inputQuantHeader.setForeground(Color.YELLOW);
+        detailsHeader.setForeground(Color.RED);
+        subtotalHeader.setForeground(Color.CYAN);
+        inputID.setOpaque(true);
+        inputQuant.setOpaque(true);
+        detailsLabel.setOpaque(true);
+        subtotalLabel.setOpaque(true);
+        inputID.setBackground(Color.WHITE);
+        inputQuant.setBackground(Color.WHITE);
+        detailsLabel.setBackground(Color.WHITE);
+        subtotalLabel.setBackground(Color.WHITE);
+
+
         cartHeader.setForeground(Color.RED);
         cart1.setOpaque(true);
         cart2.setOpaque(true);
@@ -135,6 +160,19 @@ public class EShop extends JFrame{
         cart3.setBackground(Color.WHITE);
         cart4.setBackground(Color.WHITE);
         cart5.setBackground(Color.WHITE);
+
+        northPanel.add(inputIDHeader);
+        northPanel.add(inputID);
+        northPanel.add(inputQuantHeader);
+        northPanel.add(inputQuant);
+        northPanel.add(detailsHeader);
+        northPanel.add(detailsLabel);
+        northPanel.add(subtotalHeader);
+        northPanel.add(subtotalLabel);
+
+
+
+
 
 
         centerPanel.add(cartHeader);
