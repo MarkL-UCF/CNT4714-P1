@@ -15,7 +15,6 @@ public class EShop extends JFrame{
     private static final int WINDOW_WIDTH = 900; //pixels
     private static final int WINDOW_HEIGHT = 500; //pixels
     final int itemCount = 0; //temporarily here to suppress compiler errors
-    //int itemsInCart = 0;
 
     //private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
 
@@ -36,10 +35,18 @@ public class EShop extends JFrame{
     private NewButtonHandler newbHandler;
     private ExitButtonHandler exitbHandler;
 
+    //math stuff
+    private CartItem curItem; //store a found item
+    private CartItem[] cart; //the actual cart
+
 
 
     //Windchill():  constructor
     public EShop() {
+        //instantiate math stuff
+        curItem = null;
+        cart = new CartItem[5];
+
         //configure GUI
         window.setTitle("Nile.com - Spring 2025"); //set title of the frame
         window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); //set frame size
@@ -219,7 +226,11 @@ public class EShop extends JFrame{
 
     private class ProcessButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            //set class vars
+            Integer id, requestedQuant, quant;
+            Double price;
+            String desc;
+
+
 
             System.out.println("The Find Item Button Was Clicked...");
             /*
@@ -306,6 +317,30 @@ public class EShop extends JFrame{
             System.out.println("The Exit Button Was Clicked...");
 
             System.exit(0);
+        }
+    }
+
+    //represents a cart item entry
+    class CartItem {
+        public final Integer itemID, quant;
+        public final Double price, disc;
+        public final String desc;
+        public CartItem(Integer id, Integer quantity, Double price, String description) {
+            this.itemID = id;
+            this.quant = quantity;
+            this.price = price;
+            this.desc = description;
+
+            //discount calculator
+
+            if(quant < 5)
+                this.disc = 0.0;
+            else if(quant < 10)
+                this.disc = 0.10;
+            else if(quant < 15)
+                this.disc = 0.15;
+            else
+                this.disc = 0.20;
         }
     }
 
