@@ -1,7 +1,7 @@
 /* Name: Mark Lee
 Course: CNT 4714 – Spring 2025
 Assignment title: Project 1 – An Event-driven Enterprise Simulation
-Date: Sunday January 26, 2025
+Date: Sunday January 29, 2025
 */
 
 package Project;
@@ -9,11 +9,13 @@ package Project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 
 public class EShop extends JFrame{
     //class constants
     private static final int WINDOW_WIDTH = 900; //pixels
     private static final int WINDOW_HEIGHT = 500; //pixels
+    private static final double TAX = 0.06; //tax constant
     final int itemCount = 0; //temporarily here to suppress compiler errors
 
     //private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
@@ -38,6 +40,10 @@ public class EShop extends JFrame{
     //math stuff
     private CartItem curItem; //store a found item
     private CartItem[] cart; //the actual cart
+    private Double curPrice = 0.0;
+    private Double curSubtotal = 0.0;
+    DecimalFormat moneyFormat = new DecimalFormat("'$'0.00");
+    DecimalFormat percentFormat = new DecimalFormat("###'%'");
 
 
 
@@ -100,9 +106,9 @@ public class EShop extends JFrame{
         exitB.addActionListener(exitbHandler);
 
         //initial settings for buttons, fields
-        confirmB.setEnabled(true);
-        deleteB.setEnabled(true);
-        finishB.setEnabled(true);
+        confirmB.setEnabled(false);
+        deleteB.setEnabled(false);
+        finishB.setEnabled(false);
         blankButton.setBackground(Color.DARK_GRAY);
         blankButton.setVisible(false);
 
@@ -112,9 +118,6 @@ public class EShop extends JFrame{
         //create grid layouts
         GridLayout grid6by2 = new GridLayout(6,2,8,4);
         GridLayout grid7by2 = new GridLayout(7,2,8,4);
-
-        //GridLayout grid5by2 = new GridLayout(5,2,8,6); //buttons
-        //GridLayout grid6by2X = new GridLayout(6,2,2,2); //cart
 
         //create panels
         JPanel northPanel = new JPanel();
@@ -177,11 +180,6 @@ public class EShop extends JFrame{
         northPanel.add(subtotalHeader);
         northPanel.add(subtotalLabel);
 
-
-
-
-
-
         centerPanel.add(cartHeader);
         centerPanel.add(cart1);
         centerPanel.add(cart2);
@@ -226,46 +224,38 @@ public class EShop extends JFrame{
 
     private class ProcessButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            Integer id, requestedQuant, quant;
-            Double price;
-            String desc;
-
-
 
             System.out.println("The Find Item Button Was Clicked...");
-            /*
+
             try {
-                //set max array size
+                String inString1 = inputID.getText();
+                String inString2 = inputQuant.getText();
 
-                //get user input from GUI fields
+                Integer searchID = Integer.parseInt(inString1);
+                Integer searchQuant = Integer.parseInt(inString2);
 
-                //initialize arrays
+                CartItem searchedItem = ItemFinder.SearchInventoryFile(searchID, searchQuant);
 
-                //set up for file reading
+                //searched item had no issues
+                if(searchedItem != null) {
+                    curItem = searchedItem;
+                    curPrice = (curItem.reqQuant * curItem.price) * (1.0 - curItem.disc);
 
-                //loop through the file until itemID or EOF reached
-                    //if ItemID Found
-                        //record line in file where found
-                        //put the values from the file line into the placeholders
-                        //indicate item found
-                        //break out of loop
-                    //determine conditions of loop end
-                    //depending on how loop ended prepare output message to reflect terminating condition
-                        //item is not in stock
-                        //zero quantity entered
-                        //item not found in file
-                        //insufficient stock on hand
-                    //otherwise good to go - item found, in stock, sufficient quantity on hand
-                        //prepare line for display in GUI
-                        //update GUI entry to show item selected with information
-                        //update button functionality on GUI
+                    //update GUI
+                    detailsLabel.setText(curItem.itemID +  " " + curItem.desc + " " + moneyFormat.format(curItem.price) + " " + percentFormat.format(curItem.disc * 100) + " " + moneyFormat.format(curPrice));
+
+
+                    confirmB.setEnabled(true);
+                }
+
+                //if item has issue, nothing changes
+                //everything is as if the search never occurred;
+
             } //end try
-            catch {
-                //file not found
-                //IO exception
-                //number format exception
-            } //end method
-             */
+            catch(NumberFormatException numberFormatException){
+                JOptionPane.showMessageDialog(null, "Error: Input must be an integer and not too large", "Nile Dot Com - ERROR", JOptionPane.ERROR_MESSAGE);
+            } //IO and FNF exceptions handled in ItemFinder()
+
         }
     }
 
@@ -320,33 +310,9 @@ public class EShop extends JFrame{
         }
     }
 
-    //represents a cart item entry
-    class CartItem {
-        public final Integer itemID, quant;
-        public final Double price, disc;
-        public final String desc;
-        public CartItem(Integer id, Integer quantity, Double price, String description) {
-            this.itemID = id;
-            this.quant = quantity;
-            this.price = price;
-            this.desc = description;
-
-            //discount calculator
-
-            if(quant < 5)
-                this.disc = 0.0;
-            else if(quant < 10)
-                this.disc = 0.10;
-            else if(quant < 15)
-                this.disc = 0.15;
-            else
-                this.disc = 0.20;
-        }
-    }
-
     //main():  application entry point
     public static void main(String[] args) {
         EShop gui = new EShop(); // create the frame object
-        //ItemFinder.SearchInventoryFile();
+        //CartItem debugItem = ItemFinder.SearchInventoryFile(234887, 1);
     }
 }
