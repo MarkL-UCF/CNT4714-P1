@@ -3,7 +3,7 @@ package Project;
 //represents a cart item entry
 class CartItem {
     public final Integer itemID, quant, reqQuant;
-    public final Double price, disc;
+    public final Double price, disc, finalPrice;
     public final String desc;
     public CartItem(Integer id, Integer quantity, Integer requestedQuantity, Double price, String description) {
         this.itemID = id;
@@ -22,5 +22,7 @@ class CartItem {
             this.disc = 0.15;
         else
             this.disc = 0.20;
+
+        this.finalPrice = (reqQuant * price) * (1 - disc);
     }
 }

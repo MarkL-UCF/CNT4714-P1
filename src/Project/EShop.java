@@ -16,7 +16,7 @@ public class EShop extends JFrame{
     private static final int WINDOW_WIDTH = 900; //pixels
     private static final int WINDOW_HEIGHT = 500; //pixels
     private static final double TAX = 0.06; //tax constant
-    final int itemCount = 0; //temporarily here to suppress compiler errors
+    int itemCount = 0; //temporarily here to suppress compiler errors
 
     //private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
 
@@ -40,7 +40,6 @@ public class EShop extends JFrame{
     //math stuff
     private CartItem curItem; //store a found item
     private CartItem[] cart; //the actual cart
-    private Double curPrice = 0.0;
     private Double curSubtotal = 0.0;
     DecimalFormat moneyFormat = new DecimalFormat("'$'0.00");
     DecimalFormat percentFormat = new DecimalFormat("###'%'");
@@ -63,9 +62,9 @@ public class EShop extends JFrame{
         blankLabel = new JLabel(" ", SwingConstants.RIGHT);
         controlsLabel = new JLabel(" USER CONTROLS ", SwingConstants.RIGHT);
 
-        inputIDHeader = new JLabel("Enter ID for Item #1:", SwingConstants.RIGHT);
-        inputQuantHeader = new JLabel("Enter quantity for Item #1:", SwingConstants.RIGHT);
-        detailsHeader = new JLabel("Details for Item #1:", SwingConstants.RIGHT);
+        inputIDHeader = new JLabel("Enter ID for Item #" + (itemCount + 1) + ":", SwingConstants.RIGHT);
+        inputQuantHeader = new JLabel("Enter quantity for Item #"  + (itemCount + 1) + ":", SwingConstants.RIGHT);
+        detailsHeader = new JLabel("Details for Item #"  + (itemCount + 1) + ":", SwingConstants.RIGHT);
         subtotalHeader = new JLabel("Current Subtotal for 0 item(s):", SwingConstants.RIGHT);
         inputID = new JTextField();
         inputQuant = new JTextField();
@@ -198,14 +197,14 @@ public class EShop extends JFrame{
         southPanel.add(newB);
         southPanel.add(exitB);
 
-        centerFrame(WINDOW_WIDTH, WINDOW_HEIGHT);
+        CenterFrame(WINDOW_WIDTH, WINDOW_HEIGHT);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true); //display the frame
         //window.show();
     }
 
     //centers frame on screen
-    public void centerFrame(int frameWidth, int frameHeight) {
+    public void CenterFrame(int frameWidth, int frameHeight) {
         //create a toolkit object
         Toolkit aToolkit = Toolkit.getDefaultToolkit();
 
@@ -220,7 +219,59 @@ public class EShop extends JFrame{
         window.setBounds(xPositionOfFrame, yPositionOfFrame, frameWidth, frameHeight);
     }
 
+    //updates the cart area of the GUI
+    public void updateCart() {
+        if(itemCount > 0) {
+            cartHeader.setText("Your Shopping Cart Currently Contains " + (itemCount) + " Item(s)");
+            subtotalHeader.setText("Current Subtotal for " + (itemCount)  + " item(s)");
+            subtotalLabel.setText(moneyFormat.format(curSubtotal));
+            processB.setText("Search For Item #" + (itemCount + 1));
+            confirmB.setText("Add Item #" + (itemCount + 1) + " To Cart");
+            inputIDHeader.setText("Enter item ID for Item " + (itemCount + 1) + ":");
+            inputQuantHeader.setText("Enter quantity for Item #" + (itemCount + 1) + ":");
+            deleteB.setEnabled(true);
+            finishB.setEnabled(true);
 
+        }
+        else {
+            cartHeader.setText("Your Shopping Cart Is Currently Empty");
+            subtotalHeader.setText("Current Subtotal for 0 item(s)");
+            subtotalLabel.setText("");
+            processB.setText("Search For Item #1");
+            confirmB.setText("Add Item #1 To Cart");
+            inputIDHeader.setText("Enter item ID for Item #1:");
+            inputQuantHeader.setText("Enter quantity for Item #1:");
+            deleteB.setEnabled(false);
+            finishB.setEnabled(false);
+        }
+
+        if(cart[0] != null) {
+            cart1.setText("Item 1 - SKU: " + cart[0].itemID + ", Desc: " + cart[0].desc + ", Price Ea. " + moneyFormat.format(cart[0].price) + ", Qty: " + cart[0].reqQuant + ", Total: " + moneyFormat.format(cart[0].finalPrice));
+        }
+        else
+            cart1.setText(" ");
+        if(cart[1] != null) {
+            cart2.setText("Item 2 - SKU: " + cart[1].itemID + ", Desc: " + cart[1].desc + ", Price Ea. " + moneyFormat.format(cart[1].price) + ", Qty: " + cart[1].reqQuant + ", Total: " + moneyFormat.format(cart[1].finalPrice));
+        }
+        else
+            cart2.setText(" ");
+        if(cart[2] != null) {
+            cart3.setText("Item 3 - SKU: " + cart[2].itemID + ", Desc: " + cart[2].desc + ", Price Ea. " + moneyFormat.format(cart[2].price) + ", Qty: " + cart[2].reqQuant + ", Total: " + moneyFormat.format(cart[2].finalPrice));
+        }
+        else
+            cart3.setText(" ");
+        if(cart[3] != null) {
+            cart4.setText("Item 4 - SKU: " + cart[3].itemID + ", Desc: " + cart[3].desc + ", Price Ea. " + moneyFormat.format(cart[3].price) + ", Qty: " + cart[3].reqQuant + ", Total: " + moneyFormat.format(cart[3].finalPrice));
+        }
+        else
+            cart4.setText(" ");
+        if(cart[4] != null) {
+            cart5.setText("Item 5 - SKU: " + cart[4].itemID + ", Desc: " + cart[4].desc + ", Price Ea. " + moneyFormat.format(cart[4].price) + ", Qty: " + cart[4].reqQuant + ", Total: " + moneyFormat.format(cart[4].finalPrice));
+            confirmB.setEnabled(false); //prevents confirmButton from working if cart is full to avoid overflow
+        }
+        else
+            cart5.setText(" ");
+    }
 
     private class ProcessButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
@@ -239,11 +290,10 @@ public class EShop extends JFrame{
                 //searched item had no issues
                 if(searchedItem != null) {
                     curItem = searchedItem;
-                    curPrice = (curItem.reqQuant * curItem.price) * (1.0 - curItem.disc);
 
                     //update GUI
-                    detailsLabel.setText(curItem.itemID +  " " + curItem.desc + " " + moneyFormat.format(curItem.price) + " " + percentFormat.format(curItem.disc * 100) + " " + moneyFormat.format(curPrice));
-
+                    detailsLabel.setText(curItem.itemID +  " " + curItem.desc + " " + moneyFormat.format(curItem.price) + " " + percentFormat.format(curItem.disc * 100) + " " + moneyFormat.format(curItem.finalPrice));
+                    detailsHeader.setText("Details for Item #"  + (itemCount + 1) + ":");
 
                     confirmB.setEnabled(true);
                 }
@@ -263,21 +313,48 @@ public class EShop extends JFrame{
         public void actionPerformed(ActionEvent e) {
             System.out.println("The Add Item To Cart Button Was Clicked...");
 
-            //fill cart array with values for selected item
-            //prepare output message for display in dialog box
+            //add current item to cart and subtotal
+            if(itemCount < 5) {
+                cart[itemCount] = curItem;
+                curSubtotal += curItem.finalPrice;
+            }
+            else {
+                System.out.println("Somehow tried to add more items than allowed");
+                return;
+            } //theoretically should never trigger
 
-            //itemCount++; //count the number of items in order
-            //assert itemCount > 0: "Item count is <= 0";
+            ++itemCount;
 
-            //output message dialog
+            updateCart(); //reflect changes
 
-            //reset labels, text fields, buttons in GUI
+            //clear input fields and disable confirmation button
+            confirmB.setEnabled(false);
+            inputID.setText("");
+            inputQuant.setText("");
+
+            System.out.println("Item successfully added to cart");
         }
     }
 
     private class DeleteButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            System.out.println("The View Cart Button Was Clicked...");
+            System.out.println("The Delete Button Was Clicked...");
+
+            //delete item from cart and subtotal
+            if(itemCount > 0) {
+                curSubtotal -= cart[itemCount - 1].finalPrice;
+                cart[itemCount - 1] = null;
+            }
+            else{
+                System.out.println("Somehow tried to delete items out of an empty cart");
+                return;
+            } //theoretically shouldn't trigger
+
+            --itemCount;
+
+            updateCart();
+
+            System.out.print("Item successfully deleted");
         }
     }
 
@@ -299,6 +376,16 @@ public class EShop extends JFrame{
     private class NewButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             System.out.println("The New Button Was Clicked...");
+
+            //wipe cart data and subtotal data
+            for(int i = 0; i < 5; ++i)
+                cart[i] = null;
+            curSubtotal = 0.0;
+            itemCount = 0;
+
+            updateCart();
+
+            System.out.println("The cart was emptied");
         }
     }
 
