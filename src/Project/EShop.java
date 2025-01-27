@@ -9,7 +9,13 @@ package Project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class EShop extends JFrame{
     //class constants
@@ -362,14 +368,29 @@ public class EShop extends JFrame{
         public void actionPerformed(ActionEvent e) {
             System.out.println("The Check Out Button Was Clicked...");
 
+            //formatter stuff
+            DateTimeFormatter dialogFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm:ssa z");
+            ZonedDateTime curTime = ZonedDateTime.now();
+            System.out.println("Date: " + curTime.format(dialogFormatter));
+
+            //vars
+
+
+
+            //invoice message is done via dialog
+            JDialog invoice = new JDialog(window, "Nile Dot Com - FINAL INVOICE");
+
             /*
             try {
 
             }
-            catch {
-
+            catch(FileNotFoundException fileNotFoundException) {
+                JOptionPane.showMessageDialog(null, "Error: File not found", "Nile Dot Com - ERROR", JOptionPane.ERROR_MESSAGE);
             }
-             */
+            catch(IOException ioException) {
+                JOptionPane.showMessageDialog(null, "Error: Problem reading from file", "Nile Dot Com - ERROR", JOptionPane.ERROR_MESSAGE);
+            }*/
+
         }
     }
 
