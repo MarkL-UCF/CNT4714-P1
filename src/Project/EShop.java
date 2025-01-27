@@ -277,6 +277,9 @@ public class EShop extends JFrame{
         }
         else
             cart5.setText(" ");
+
+        if(itemCount >= 5)
+            processB.setEnabled(false);
     }
 
     private class ProcessButtonHandler implements ActionListener{
@@ -370,8 +373,11 @@ public class EShop extends JFrame{
 
             //formatter stuff
             DateTimeFormatter dialogFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm:ssa z");
+            DateTimeFormatter csvIDFormatter = DateTimeFormatter.ofPattern("MMddyyyykkmmss");
             ZonedDateTime curTime = ZonedDateTime.now();
-            System.out.println("Date: " + curTime.format(dialogFormatter));
+
+            System.out.println("Date for dialog: " + curTime.format(dialogFormatter));
+            System.out.println("Date for csv ID: " + curTime.format(csvIDFormatter));
 
             //vars
 
@@ -379,6 +385,14 @@ public class EShop extends JFrame{
 
             //invoice message is done via dialog
             JDialog invoice = new JDialog(window, "Nile Dot Com - FINAL INVOICE");
+            invoice.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+            JPanel dPanel = new JPanel();
+            dPanel.setLayout(new BoxLayout(dPanel, BoxLayout.PAGE_AXIS));
+
+            invoice.add(dPanel);
+
+            invoice.setVisible(true);
 
             /*
             try {
