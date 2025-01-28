@@ -492,6 +492,7 @@ public class EShop extends JFrame{
             processB.setEnabled(true);
             inputID.setEnabled(true);
             inputQuant.setEnabled(true);
+            detailsLabel.setEnabled(false);
 
             System.out.println("The cart was emptied");
         }
