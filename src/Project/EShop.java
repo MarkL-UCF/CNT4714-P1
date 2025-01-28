@@ -9,14 +9,12 @@ package Project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal", "unused"})
 public class EShop extends JFrame{
     //class constants
     private static final int WINDOW_WIDTH = 900; //pixels
@@ -30,7 +28,10 @@ public class EShop extends JFrame{
     //window for GUI
     private JFrame window = new JFrame("Nile.com");
 
-    private JLabel blankLabel, controlsLabel, cartHeader, cart1, cart2, cart3, cart4, cart5;
+    //window for Invoice
+    private JDialog invoice;
+
+    private JLabel controlsLabel, cartHeader, cart1, cart2, cart3, cart4, cart5;
     private JLabel inputIDHeader, inputQuantHeader, detailsHeader, subtotalHeader, detailsLabel, subtotalLabel;
     private JButton blankButton, processB, confirmB, deleteB, finishB, newB, exitB;
     private JTextField inputID, inputQuant;
@@ -65,7 +66,6 @@ public class EShop extends JFrame{
 
         //instantiate JLabel objects
         blankButton = new JButton(" ");
-        blankLabel = new JLabel(" ", SwingConstants.RIGHT);
         controlsLabel = new JLabel(" USER CONTROLS ", SwingConstants.RIGHT);
 
         inputIDHeader = new JLabel("Enter ID for Item #" + (itemCount + 1) + ":", SwingConstants.RIGHT);
@@ -380,31 +380,93 @@ public class EShop extends JFrame{
             System.out.println("Date for csv ID: " + curTime.format(csvIDFormatter));
 
             //vars
+            JLabel dateL, numL, headerL, subtotalL, taxRL, taxAL, totalL, thankL, spacer;
 
 
-
-            //invoice message is done via dialog
-            JDialog invoice = new JDialog(window, "Nile Dot Com - FINAL INVOICE");
+            //dialog section
+            invoice = new JDialog(window, "Nile Dot Com - FINAL INVOICE");
             invoice.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
+            GridLayout grid22by1 = new GridLayout(22,1,8,8);
             JPanel dPanel = new JPanel();
-            dPanel.setLayout(new BoxLayout(dPanel, BoxLayout.PAGE_AXIS));
+            dPanel.setLayout(grid22by1);
 
             invoice.add(dPanel);
+            dPanel.setBackground(Color.WHITE);
+
+            JButton closeDB = new JButton("OK");
+            CloseDialogHandler closeDialogHandler = new CloseDialogHandler();
+            closeDB.addActionListener(closeDialogHandler);
+
+            dateL = new JLabel("Date: " + curTime.format(dialogFormatter));
+            dPanel.add(dateL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            numL = new JLabel("Number of line items: " + itemCount);
+            dPanel.add(numL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            headerL = new JLabel("Item# / ID / Title / Price / Qty / Disc % / Subtotal");
+            dPanel.add(headerL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+
+            //insert each cart item
+            for(int i = 0; i < itemCount; ++i) {
+                    JLabel itemL = new JLabel((i + 1) + ". " + cart[i].itemID + " " + cart[i].desc + " " + moneyFormat.format(cart[i].price) + " " + cart[i].reqQuant + " " + percentFormat.format(cart[i].disc) + " " + moneyFormat.format(cart[i].finalPrice));
+                    dPanel.add(itemL);
+            }
+
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            subtotalL = new JLabel("Order subtotal: " + moneyFormat.format(curSubtotal));
+            dPanel.add(subtotalL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            taxRL = new JLabel("Tax Rate: " + percentFormat.format(TAX * 100));
+            dPanel.add(taxRL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            taxAL = new JLabel("Tax amount: " + moneyFormat.format(curSubtotal * TAX));
+            dPanel.add(taxAL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            totalL = new JLabel("ORDER TOTAL: " + moneyFormat.format(curSubtotal + (curSubtotal * TAX)));
+            dPanel.add(totalL);
+            spacer = new JLabel("");
+            dPanel.add(spacer);
+            thankL = new JLabel("Thanks for shopping at Nile Dot Com!");
+            dPanel.add(thankL);
+            dPanel.add(closeDB);
 
             invoice.setVisible(true);
+            //end of invoice code
 
-            /*
-            try {
+            //start of file writing section
+            try (FileWriter writer = new FileWriter("transactions.csv", true);
+                 BufferedWriter bWriter = new BufferedWriter(writer);
+                 PrintWriter FileOut = new PrintWriter(bWriter)){
 
+                for(int i = 0; i < itemCount; ++i) {
+                    FileOut.println(csvIDFormatter.format(curTime) + ", " + cart[i].itemID + ", " + cart[i].desc + ", " + moneyFormat.format(cart[i].price) + ", " + percentFormat.format(cart[i].disc * 100) + ", " + moneyFormat.format(cart[i].finalPrice) +  ", " + dialogFormatter.format(curTime));
+                }
+
+                FileOut.println("");
             }
             catch(FileNotFoundException fileNotFoundException) {
                 JOptionPane.showMessageDialog(null, "Error: File not found", "Nile Dot Com - ERROR", JOptionPane.ERROR_MESSAGE);
             }
             catch(IOException ioException) {
                 JOptionPane.showMessageDialog(null, "Error: Problem reading from file", "Nile Dot Com - ERROR", JOptionPane.ERROR_MESSAGE);
-            }*/
+            }
 
+            processB.setEnabled(false);
+            confirmB.setEnabled(false);
+            deleteB.setEnabled(false);
+            finishB.setEnabled(false);
+            inputID.setEnabled(false);
+            inputQuant.setEnabled(false);
         }
     }
 
@@ -420,10 +482,15 @@ public class EShop extends JFrame{
 
             updateCart();
 
+            processB.setEnabled(true);
+            inputID.setEnabled(true);
+            inputQuant.setEnabled(true);
+
             System.out.println("The cart was emptied");
         }
     }
 
+    @SuppressWarnings("InnerClassMayBeStatic")
     private class ExitButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             System.out.println("The Exit Button Was Clicked...");
@@ -432,9 +499,16 @@ public class EShop extends JFrame{
         }
     }
 
+    private class CloseDialogHandler implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("The Invoice's OK Button Was Clicked...");
+
+            invoice.dispose();
+        }
+    }
+
     //main():  application entry point
     public static void main(String[] args) {
         EShop gui = new EShop(); // create the frame object
-        //CartItem debugItem = ItemFinder.SearchInventoryFile(234887, 1);
     }
 }
