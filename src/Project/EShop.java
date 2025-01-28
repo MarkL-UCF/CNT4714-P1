@@ -365,6 +365,7 @@ public class EShop extends JFrame{
             --itemCount;
 
             updateCart();
+            detailsLabel.setText("");
 
             System.out.print("Item successfully deleted");
         }
