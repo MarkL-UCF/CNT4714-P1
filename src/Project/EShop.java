@@ -278,8 +278,11 @@ public class EShop extends JFrame{
         else
             cart5.setText(" ");
 
+        //noinspection RedundantIfStatement
         if(itemCount >= 5)
             processB.setEnabled(false);
+        else
+            processB.setEnabled(true);
     }
 
     private class ProcessButtonHandler implements ActionListener{
@@ -385,10 +388,10 @@ public class EShop extends JFrame{
 
             //dialog section
             invoice = new JDialog(window, "Nile Dot Com - FINAL INVOICE");
-            invoice.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-            GridLayout grid22by1 = new GridLayout(22,1,8,8);
+            invoice.setSize(WINDOW_WIDTH, (WINDOW_HEIGHT + 200)/2);
+            //GridLayout grid22by1 = new GridLayout(22,1,8,8);
             JPanel dPanel = new JPanel();
-            dPanel.setLayout(grid22by1);
+            dPanel.setLayout(new BoxLayout(dPanel, BoxLayout.PAGE_AXIS));
 
             invoice.add(dPanel);
             dPanel.setBackground(Color.WHITE);
@@ -397,6 +400,9 @@ public class EShop extends JFrame{
             CloseDialogHandler closeDialogHandler = new CloseDialogHandler();
             closeDB.addActionListener(closeDialogHandler);
 
+            //box layout doesn't show blank labels for some reason
+            //yet works with grid layout, but that kept trying to make a 2nd column when there should only be one
+            //so it looks cluttered and all these spacer labels are useless bloat, sorry
             dateL = new JLabel("Date: " + curTime.format(dialogFormatter));
             dPanel.add(dateL);
             spacer = new JLabel("");
